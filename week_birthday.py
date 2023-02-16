@@ -1,9 +1,6 @@
 from datetime import date, timedelta
 from collections import defaultdict
 
-TODAY = date.today()
-END_OF_THE_WEEK = TODAY + timedelta(days=6)
-
 def next_date_occurence(cycle_date: date, base_date=date.today()) -> date:
     '''
     Return first occurence of the cycle date after the base date
@@ -27,18 +24,21 @@ def transfer_date_from_weekend(date: date) -> date:
         date += timedelta(days=offset)
     return date
 
-def get_birthdays_per_week(users: dict) -> dict:
+def get_birthdays_per_week(users: dict) -> defaultdict:
     '''
     Selects birthdays that will be during the week
     Print birtdays timetable per week and return appropriate dictionary
     '''
+    today = date.today()
+    end_of_the_week = today + timedelta(days=6)
     birthdays = defaultdict(list)
+
     for user in users:
         for name, b_date in user.items():
-            current_b_date = next_date_occurence(b_date, TODAY)
-            if current_b_date <= END_OF_THE_WEEK:
+            current_b_date = next_date_occurence(b_date, today)
+            if current_b_date <= end_of_the_week:
                 congr_day = transfer_date_from_weekend(current_b_date)
-                if congr_day > END_OF_THE_WEEK:
+                if congr_day > end_of_the_week:
                     continue
                 birthdays[congr_day].append(name) 
 
@@ -50,7 +50,7 @@ def get_birthdays_per_week(users: dict) -> dict:
     return birthdays
 
 def main():
-    users = [{'Bob': date(2023, 2, 17)}, {'Flint': date(2023, 2, 18)}, {'Flont': date(2023, 1, 19)}]
+    users = [{'Bob': date(2023, 2, 16)}, {'Flint': date(2023, 2, 18)}, {'Flont': date(2023, 1, 19)}]
     birthdays_per_week = get_birthdays_per_week(users)
     return birthdays_per_week
     
