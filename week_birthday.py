@@ -34,13 +34,14 @@ def get_birthdays_per_week(users: dict) -> defaultdict:
     birthdays = defaultdict(list)
 
     for user in users:
-        for name, b_date in user.items():
-            current_b_date = next_date_occurence(b_date, today)
-            if current_b_date <= end_of_the_week:
-                congr_day = transfer_date_from_weekend(current_b_date)
-                if congr_day > end_of_the_week:
-                    continue
-                birthdays[congr_day].append(name) 
+        name, *_ = user
+        b_date = user[name]
+        current_b_date = next_date_occurence(b_date, today)
+        if current_b_date <= end_of_the_week:
+            congr_day = transfer_date_from_weekend(current_b_date)
+            if congr_day > end_of_the_week:
+                continue
+            birthdays[congr_day].append(name) 
 
     for d, names in birthdays.items():
         w_d = d.strftime('%A')
@@ -50,15 +51,14 @@ def get_birthdays_per_week(users: dict) -> defaultdict:
     return birthdays
 
 def main():
-    users = [{'Bob': date(2023, 2, 16)}, {'Flint': date(2023, 2, 18)}, {'Flont': date(2023, 1, 19)}]
+    users = [{'Bob': date(1998, 2, 16)}, {'Flint': date(2003, 2, 18)}, {'Flont': date(1980, 1, 19)}]
     birthdays_per_week = get_birthdays_per_week(users)
     return birthdays_per_week
     
 
 if __name__ == '__main__':
     main()
-    
-    
+
 
 
 
